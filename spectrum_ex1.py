@@ -1,6 +1,7 @@
 import numpy as np
 from qutip import *
 import pylab as plt
+from JCM import  JCM_Hamiltonian
 
 N = 4                   # number of cavity fock states
 wc = wa = 1.0 * 2 * np.pi  # cavity and atom frequency
@@ -11,7 +12,8 @@ gamma = 0.25            # atom dissipation rate
 # Jaynes-Cummings Hamiltonian
 a  = tensor(destroy(N), qeye(2))
 sm = tensor(qeye(N), destroy(2))
-H = wc * a.dag() * a + wa * sm.dag() * sm + g * (a.dag() * sm + a * sm.dag())
+H = JCM_Hamiltonian(N, wc, wa, g)
+
 
 # collapse operators
 n_th = 0.25
