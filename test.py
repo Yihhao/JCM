@@ -1,22 +1,17 @@
 import numpy as np
 from qutip import *
 import pylab as plt
-from JCM import JCM_Hamiltonian, inital_fock_state
 
-wc = 1.0  * 2 * np.pi  # cavity frequency
-wa = 1.0  * 2 * np.pi  # atom frequency
-g  = 0.05 * 2 * np.pi  # coupling strength
-kappa = 0.005          # cavity dissipation rate
-gamma = 0.05           # atom dissipation rate
-N = 15                 # number of cavity fock states
-n_th_a = 0.0           # temperature in frequency units
-use_rwa = True
-
+N = 4                   # number of cavity fock states
+wc = wa = 1.0 * 2 * np.pi  # cavity and atom frequency
+g  = 0.1 * 2 * np.pi       # coupling strength
+kappa = 0.75            # cavity dissipation rate
+gamma = 0.25            # atom dissipation rate
 
 # Jaynes-Cummings Hamiltonian
 a  = tensor(destroy(N), qeye(2))
 sm = tensor(qeye(N), destroy(2))
-H = JCM_Hamiltonian(N, wc, wa, g, use_rwa)
+H = wc * a.dag() * a + wa * sm.dag() * sm + g * (a.dag() * sm + a * sm.dag())
 
 # collapse operators
 n_th = 0.25
@@ -24,7 +19,7 @@ c_ops = [np.sqrt(kappa * (1 + n_th)) * a, np.sqrt(kappa * n_th) * a.dag(), np.sq
 
 # calculate the correlation function using the mesolve solver, and then fft to
 # obtain the spectrum. Here we need to make sure to evaluate the correlation
-# function for a sufficient long time and sufficiently high sampling rate so 
+# function for a sufficient long time and sufficiently high sampling rate so
 # that the discrete Fourier transform (FFT) captures all the features in the
 # resulting spectrum.
 tlist = np.linspace(0, 100, 5000)
@@ -48,13 +43,9 @@ ax.set_title('Vacuum Rabi splitting')
 ax.set_xlim(wlist2[0]/(2*np.pi), wlist2[-1]/(2*np.pi))
 plt.show()
 
-psi0 = inital_fock_state(N, n=0)
-output = mesolve(H, psi0, tlist, c_ops, [a.dag() * a, sm.dag() * sm])
-fig, ax = plt.subplots(figsize=(8,5))
-ax.plot(tlist, output.expect[0], label="Cavity")
-ax.plot(tlist, output.expect[1], label="Atom excited state")
-ax.legend()
-ax.set_xlabel('Time')
-ax.set_ylabel('Occupation probability')
-ax.set_title('Vacuum Rabi oscillations')
+plt.figure()
+plt.plot(tlist, corr)
+plt.xlabel(r'Time $t$')
+plt.ylabel(r'Correlation $\left<a^{\dagger}(t)a(0)\right>$')
+plt.xlim([0, 20])
 plt.show()

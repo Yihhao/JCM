@@ -30,20 +30,3 @@ if __name__ == '__main__':
     axes.set_xlabel(r'$w_a$', fontsize=18)
     axes.set_ylabel(r'$E_n$', fontsize=18)
     plt.show()
-    """another way plot anti-crossing figure"""
-    eigenvalue = []
-    sz = np.array([[1, 0],
-                   [0, -1]])
-    a = np.array([[0, 1],
-                  [0, 0]])
-    I = np.eye(2)
-    adag = np.array([[0, 0],
-                     [1, 0]])
-    for wa in wa_list:
-        delta = wa - wc
-        H_p = (wc + (g**2 / delta) * sz) * adag * a + 0.5 * (wa + (g**2/ delta)) *sz
-        ev = eigvals(H_p)
-        eigenvalue.append(ev[0])
-    plt.scatter(wa_list, eigenvalue)
-    plt.title('JCM approximation')
-    plt.show()
