@@ -13,7 +13,7 @@ if __name__ == '__main__':
     wa = wc + delta  # atom frequency
     g = wa  # coupling strength
     N = 100  # number of cavity fock states
-    n = 5  # fock state occupy number of cavity
+    n = 0  # fock state occupy number of cavity
     use_rwa = True  # rwa: rotating wave approximation
 
     t = np.linspace(0, 5, 10001)  # time evolution
