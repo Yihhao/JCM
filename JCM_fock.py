@@ -14,7 +14,7 @@ if __name__ == '__main__':
     g = wa  # coupling strength
     N = 100  # number of cavity fock states
     n = 0    # fock state occupy number of cavity
-    use_rwa = False  # rwa: rotating wave approximation
+    use_rwa = True  # rwa: rotating wave approximation
 
     kappa = 0.005  # cavity dissipation rate
     gamma = 0.05  # atom dissipation rate
@@ -34,9 +34,11 @@ if __name__ == '__main__':
     n_d = output.expect[3]
 
     if use_rwa:
-        text_tilte = "jcm with rwa"
+        text_tilte = "jcm with rwa n = %s" % n
+        filename = "".join(['./fig/fock_rwa_', '%s' % n])
     else:
-        text_tilte = "jcm without rwa"
+        text_tilte = "jcm without rwa n = %s" % n
+        filename = "".join(['./fig/fock_', '%s' % n])
 
     fig, axes = plt.subplots(1, 1, figsize=(10, 6))
     axes.plot(g * t, n_a, label="pop inversion")
@@ -46,6 +48,7 @@ if __name__ == '__main__':
     axes.set_title(text_tilte)
     axes.text(0, 0, 'delta=%.2f' % delta)
     axes.axis([0, 20, -1, 1])
+    plt.savefig(filename+'_z')
     plt.show()
 
     fig, axes = plt.subplots(1, 1, figsize=(10, 6))
@@ -57,4 +60,5 @@ if __name__ == '__main__':
     axes.set_ylabel('probability')
     axes.set_title(text_tilte)
     axes.axis([0, 20, 0, 1.5])
+    plt.savefig(filename)
     plt.show()
