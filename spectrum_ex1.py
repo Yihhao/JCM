@@ -5,7 +5,7 @@ from JCM import JCM_Hamiltonian, inital_fock_state
 
 wc = 1.0  * 2 * np.pi  # cavity frequency
 wa = 1.0  * 2 * np.pi  # atom frequency
-g  = 0.05 * 2 * np.pi  # coupling strength
+g  = 0#0.1 * 2 * np.pi  # coupling strength
 kappa = 0.005          # cavity dissipation rate
 gamma = 0.05           # atom dissipation rate
 N = 15                 # number of cavity fock states
@@ -34,18 +34,19 @@ wlist1, spec1 = spectrum_correlation_fft(tlist, corr)
 
 # calculate the power spectrum using spectrum, which internally uses essolve
 # to solve for the dynamics (by default)
-wlist2 = np.linspace(0.25, 1.75, 200) * 2 * np.pi
-spec2 = spectrum(H, wlist2, c_ops, a.dag(), a)
+# wlist2 = np.linspace(0.25, 1.75, 200) * 2 * np.pi
+# spec2 = spectrum(H, wlist2, c_ops, a.dag(), a)
 
 # plot the spectra
 fig, ax = plt.subplots(1, 1)
 ax.plot(wlist1 / (2 * np.pi), spec1, 'b', lw=2, label='eseries method')
-ax.plot(wlist2 / (2 * np.pi), spec2, 'r--', lw=2, label='me+fft method')
+# ax.plot(wlist2 / (2 * np.pi), spec2, 'r--', lw=2, label='me+fft method')
 ax.legend()
 ax.set_xlabel('Frequency')
 ax.set_ylabel('Power spectrum')
-ax.set_title('Vacuum Rabi splitting')
-ax.set_xlim(wlist2[0]/(2*np.pi), wlist2[-1]/(2*np.pi))
+ax.set_title('Vacuum Rabi splitting g = %s* 2$\pi$' % (g/(2*np.pi)))
+ax.set_xlim(0.25, 1.75)
+plt.savefig('./fig/Vacuum_Rabi_splitting_g=%s.png' % (g/(2*np.pi)))
 plt.show()
 
 psi0 = inital_fock_state(N, n=0)
@@ -56,5 +57,6 @@ ax.plot(tlist, output.expect[1], label="Atom excited state")
 ax.legend()
 ax.set_xlabel('Time')
 ax.set_ylabel('Occupation probability')
-ax.set_title('Vacuum Rabi oscillations')
+ax.set_title('Vacuum Rabi oscillations g = %s * 2$\pi$' % (g/(2*np.pi)))
+plt.savefig('./fig/Vacuum_Rabi_oscillations_g=%s.png' % (g/(2*np.pi)))
 plt.show()

@@ -13,8 +13,8 @@ if __name__ == '__main__':
     wa = wc + delta  # atom frequency
     g = wa  # coupling strength
     N = 100  # number of cavity fock states
-    n = 0  # fock state occupy number of cavity
-    use_rwa = False  # rwa: rotating wave approximation
+    n = 5  # fock state occupy number of cavity
+    use_rwa = True  # rwa: rotating wave approximation
 
     t = np.linspace(0, 5, 10001)  # time evolution
 
@@ -34,9 +34,11 @@ if __name__ == '__main__':
     n_d = output.expect[3]
 
     if use_rwa:
-        text_tilte = "jcm with rwa"
+        text_tilte = "jcm with rwa z = %s" % n
+        filename = "".join(['./fig/coherent_rwa_', '%s' % n])
     else:
-        text_tilte = "jcm without rwa"
+        text_tilte = "jcm without rwa z = %s" % n
+        filename = "".join(['./fig/coherent_', '%s' % n])
 
     fig, axes = plt.subplots(1, 1, figsize=(10, 6))
     axes.plot(g * t, n_a, label="pop inversion")
@@ -46,6 +48,7 @@ if __name__ == '__main__':
     axes.set_title(text_tilte)
     axes.text(0, 0, 'delta=%.2f' % delta)
     axes.axis([0, 40, -1, 1])
+    plt.savefig(filename+'_z')
     plt.show()
 
     fig, axes = plt.subplots(1, 1, figsize=(10, 6))
@@ -57,4 +60,5 @@ if __name__ == '__main__':
     axes.set_ylabel('probability')
     axes.set_title(text_tilte)
     axes.axis([0, 40, 0, 1.5])
+    plt.savefig(filename)
     plt.show()
