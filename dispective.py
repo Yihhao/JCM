@@ -73,7 +73,7 @@ fig.tight_layout()
 plt.show()
 
 tlist = np.linspace(0, 1000, 10000)
-corr_vec = correlation(H, psi0, tlist, [], a.dag(), a)
+corr_vec = correlation(H, psi0, None, tlist, [], a.dag(), a)
 fig, ax = plt.subplots(1, 1, sharex=True, figsize=(12,4))
 
 ax.plot(tlist, real(corr_vec), 'r', linewidth=2, label="resonator")
