@@ -2,9 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 # make qutip available in the rest of the notebook
 from numpy import pi
-from qutip import *
-from JCM import JCM_Hamiltonian, time_evolution, inital_coherent_state
-
+from package.JCM import JCM_Hamiltonian, time_evolution, initial_coherent_state
 
 if __name__ == '__main__':
     # initial parameters
@@ -13,7 +11,7 @@ if __name__ == '__main__':
     wa = wc + delta  # atom frequency
     g = wa  # coupling strength
     N = 100  # number of cavity fock states
-    n = 0  # fock state occupy number of cavity
+    n = 25   # fock state occupy number of cavity
     use_rwa = True  # rwa: rotating wave approximation
 
     t = np.linspace(0, 5, 10001)  # time evolution
@@ -24,8 +22,9 @@ if __name__ == '__main__':
     n_th_a = 0.0  # avg number of thermal bath excitation
 
     # initial state
-    psi = inital_coherent_state(N, n)
-    H = JCM_Hamiltonian(N, wc, wa, g, use_rwa)
+    psi = initial_coherent_state(N, n)
+    H0, H1 = JCM_Hamiltonian(N, wc, wa, g, use_rwa)
+    H = H0 + H1
 
     output = time_evolution(H, psi, t, N)
     n_a = output.expect[0]
@@ -48,7 +47,7 @@ if __name__ == '__main__':
     axes.set_title(text_tilte)
     axes.text(0, 0, 'delta=%.2f' % delta)
     axes.axis([0, 40, -1, 1])
-    plt.savefig(filename+'_z')
+    plt.savefig(filename + '_z')
     plt.show()
 
     fig, axes = plt.subplots(1, 1, figsize=(10, 6))

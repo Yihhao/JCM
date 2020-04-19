@@ -1,7 +1,7 @@
 import numpy as np
 from qutip import *
 import pylab as plt
-from JCM import JCM_Hamiltonian, inital_fock_state
+from package.JCM import JCM_Hamiltonian, inital_fock_state
 
 wc = 1.0  * 2 * np.pi  # cavity frequency
 wa = 1.0  * 2 * np.pi  # atom frequency

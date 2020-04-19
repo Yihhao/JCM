@@ -1,15 +1,16 @@
 from qutip import *
 from numpy import pi, sqrt, real
+from package.JCM import JCM_Hamiltonian
 import numpy as np
 import matplotlib.pyplot as plt
 
 
 """Parameters"""
-N = 20
+N = 2
 
 wr = 2.0 * 2 * pi      # resonator frequency
 wq = 3.0 * 2 * pi      # qubit frequency
-chi = 0.025 * 2 * pi   # parameter in the dispersive hamiltonian
+chi = 0.025 * 2 * pi   # parameter in the dispersive hamiltonian >> g**2/delta
 
 delta = abs(wr - wq)        # detuning
 g = sqrt(delta * chi)  # coupling strength that is consistent with chi
@@ -29,7 +30,9 @@ xq = sm + sm.dag()
 
 I = tensor(qeye(N), qeye(2))
 # dispersive hamiltonian
-H = wr * (a.dag() * a + I/2.0) + (wq / 2.0) * sz + chi * (a.dag() * a + I/2) * sz
+H0, H1 = JCM_Hamiltonian(N, wr, wq, g, eff=True)
+H = H0 + H1
+# H = wr * (a.dag() * a + I/2.0) + (wq / 2.0) * sz + chi * (a.dag() * a + I/2) * sz
 
 """
 Try different initial state of the resonator, 

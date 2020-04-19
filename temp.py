@@ -1,37 +1,36 @@
-from qutip import *
-import numpy as np
-# import matplotlib.pyplot as plt
-from  JCM import inital_fock_state
-from matplotlib.pyplot import figure, show, legend, xlabel, ylabel, plot
+# kappa = 0.05  # cavity dissipation rate
+# gamma = 0.05  # atom dissipation rate
+# n_th = 1  # temperature in frequency unit
 
-
-N = 10
-a = destroy(N)
-x = a.dag() + a
-
-H = a.dag() * a
-
-c_ops = lambda kappa: [np.sqrt(kappa) * a]
-times = np.linspace(0, 10.0, 200)
-
-corr1 = correlation_ss(H, times, c_ops(0.5), x, x)
-corr2 = correlation_ss(H, times, c_ops(1.0), x, x)
-corr3 = correlation_ss(H, times, c_ops(2.0), x, x)
-
-figure()
-plot(times, np.real(corr1), times, np.real(corr2), times, np.real(corr3))
-legend(['0.5', '1.0', '2.0'])
-xlabel(r'Time $t$')
-ylabel(r'Correlation $\left<x(t)x(0)\right>$')
-show()
-
-psi0 = fock(N, 1)
-_, eket = H.eigenstates()
-rho = ket2dm(eket[0])
-output = essolve(H, rho, times, c_ops(2.0), [x, x])
-plot(times, output.expect[0])
-plot(times, output.expect[1])
-xlabel('Time')
-ylabel('Occupation probability')
-# title('Vacuum Rabi oscillations')
-show()
+# sm, sz, a = operator(N)
+# c_ops = [np.sqrt(kappa * (1 + n_th)) * a, np.sqrt(kappa * n_th) * a.dag(), np.sqrt(gamma) * sm]
+# e_ops = [sz, sm.dag() * sm, sm * sm.dag(), sm.dag() * sm + sm * sm.dag()]
+# output = mesolve(H, psi, t, c_ops, e_ops)
+#
+# n_a = output.expect[0]
+# n_b = output.expect[1]
+# n_c = output.expect[2]
+# n_d = output.expect[3]
+#
+# fig, axes = plt.subplots(1, 1, figsize=(10, 6))
+# axes.plot(g * t, n_a, label="pop inversion")
+# axes.legend(loc=0)
+# axes.set_xlabel('Time')
+# axes.set_ylabel('expectation value')
+# axes.set_title(text_tilte)
+# axes.text(0, 0, 'delta=%.2f' % delta)
+# axes.axis([0, 100, -1, 1])
+# plt.savefig(filename+'_decay_z')
+# plt.show()
+#
+# fig, axes = plt.subplots(1, 1, figsize=(10, 6))
+# axes.plot(g * t, n_b, label="excited")
+# axes.plot(g * t, n_c, label="ground")
+# axes.plot(g * t, n_d, label="norm")
+# axes.legend(loc=0)
+# axes.set_xlabel('Time')
+# axes.set_ylabel('expectation value')
+# axes.set_title(text_tilte)
+# axes.axis([0, 100, 0, 1.5])
+# plt.savefig(filename+'_expect')
+# plt.show()

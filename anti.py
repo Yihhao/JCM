@@ -1,8 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from numpy import sqrt, array
-from JCM import JCM_Hamiltonian
-from numpy.linalg import eigvals
+from package.JCM import JCM_Hamiltonian
+
 
 def omega_n(delta, g, n=0):
     if delta == 0:
