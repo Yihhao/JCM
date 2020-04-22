@@ -3,7 +3,6 @@ import numpy as np
 # make qutip available in the rest of the notebook
 from numpy import pi, sqrt
 from qutip import *
-from qutip.ipynbtools import plot_animation
 from package.JCM import JCM_Hamiltonian, initial_fock_state, initial_coherent_state, operator
 
 if __name__ == '__main__':
@@ -22,6 +21,7 @@ if __name__ == '__main__':
     use_rwa = True          # rwa: rotating wave approximation
     eff = True             # eff : use effective Hamiltonian
 
+
     taulist = np.linspace(0, 50, 5001)  # time evolution
 
     # collapse operators
@@ -34,6 +34,7 @@ if __name__ == '__main__':
         psi0 = initial_coherent_state(N, z, wav)
     elif text == 'fock':
         psi0 = initial_fock_state(N, z, wav)
+
     print('coupling strength g : %s' % g)
     H = JCM_Hamiltonian(N, wc, wa, g, use_rwa, eff)
     sm, sz, a, I = operator(N)
@@ -85,3 +86,4 @@ if __name__ == '__main__':
     #         rho_cavity = ptrace(res.states[i], 0)
     #         plot_wigner(rho_cavity)
     #         plt.savefig('./fig/winger/Winger%s.png' % i, dpi=720)
+

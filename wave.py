@@ -5,7 +5,8 @@ from qutip import *
 from package.JCM import JCM_Hamiltonian, initial_coherent_state, operator, initial_fock_state
 
 
-N = 15                 # number of cavity fock states
+
+N = 30                 # number of cavity fock states
 z = sqrt(4)            # fock state occupy number of cavity
 z = 5
 wc = 2.0 * 2 * pi      # cavity frequency
