@@ -5,7 +5,7 @@ from package.JCM import JCM_Hamiltonian, inital_fock_state
 
 wc = 1.0  * 2 * np.pi  # cavity frequency
 wa = 1.0  * 2 * np.pi  # atom frequency
-g  = 0.01 * 2 * np.pi #0.1 * 2 * np.pi  # coupling strength
+g  = 0.01 * 2 * np.pi  # 0.1 * 2 * np.pi  # coupling strength
 kappa = 0.005          # cavity dissipation rate
 gamma = 0.05           # atom dissipation rate
 N = 15                 # number of cavity fock states

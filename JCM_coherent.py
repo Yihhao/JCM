@@ -23,8 +23,7 @@ if __name__ == '__main__':
 
     # initial state
     psi = initial_coherent_state(N, n)
-    H0, H1 = JCM_Hamiltonian(N, wc, wa, g, use_rwa)
-    H = H0 + H1
+    H = JCM_Hamiltonian(N, wc, wa, g, use_rwa)
 
     output = time_evolution(H, psi, t, N)
     n_a = output.expect[0]

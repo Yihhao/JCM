@@ -13,8 +13,7 @@ use_rwa = True
 tlist = np.linspace(0, 25, 10001)  # time evolution
 psi0 = initial_fock_state(N, n=0)
 sm, sz, a, I = operator(N)
-H0, H1 = JCM_Hamiltonian(N, wc, wa, g)
-H = H0 + H1
+H = JCM_Hamiltonian(N, wc, wa, g)
 
 output = sesolve(H, psi0, tlist, [a.dag() * a, sm.dag() * sm])
 

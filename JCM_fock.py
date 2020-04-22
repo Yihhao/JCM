@@ -27,8 +27,7 @@ if __name__ == '__main__':
     wav = (0, 1)  # initial state  |1>
     psi = initial_fock_state(N, n, wav)
 
-    H0, H1 = JCM_Hamiltonian(N, wc, wa, g, use_rwa)
-    H = H0 + H1
+    H = JCM_Hamiltonian(N, wc, wa, g, use_rwa)
 
     output = time_evolution(H, psi, t, N)
     n_a = output.expect[0]
