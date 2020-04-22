@@ -5,15 +5,15 @@ from qutip import *
 from package.JCM import JCM_Hamiltonian, initial_coherent_state, operator, initial_fock_state
 
 
-N = 16                 # number of cavity fock states
+N = 15                 # number of cavity fock states
 z = sqrt(4)            # fock state occupy number of cavity
-
+z = 5
 wc = 2.0 * 2 * pi      # cavity frequency
-wa = 2.0 * 2 * pi      # atom frequency
+wa = 3.0 * 2 * pi      # atom frequency
 chi = 0.025 * 2 * pi   # parameter in the dispersive hamiltonian >> g**2/delta
 delta = abs(wc - wa)   # detuning
 g = sqrt(delta * chi)  # coupling strength that is consistent with chi
-g = 0.5 * 2 * pi
+# g = 0.5 * 2 * pi
 use_rwa = True        # rwa: rotating wave approximation
 
 H = JCM_Hamiltonian(N, wc, wa, g, use_rwa)

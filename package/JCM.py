@@ -121,8 +121,7 @@ def time_evolution(H, psi, tlist, N, e_ops=None):
     """
     :param e_ops : expection operators
     """
-    sm, sz, a, I = operator(N, number=1)
     if e_ops is None:
-        e_ops = [sz, sm.dag() * sm, sm * sm.dag(), sm.dag() * sm + sm * sm.dag()]
+        e_ops = []
     result = sesolve(H, psi, tlist, e_ops)
     return result

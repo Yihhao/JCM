@@ -1,20 +1,28 @@
 import matplotlib.pyplot as plt
 import numpy as np
 # make qutip available in the rest of the notebook
-from numpy import pi
-from package.JCM import JCM_Hamiltonian, time_evolution, initial_coherent_state
+from numpy import pi, sqrt
+from qutip import *
+from qutip.ipynbtools import plot_animation
+from package.JCM import JCM_Hamiltonian, initial_fock_state, initial_coherent_state, operator
 
 if __name__ == '__main__':
+    # text = 'fock'
+    text = 'coherent'
     # initial parameters
-    wc = 2.0 * 2 * pi  # cavity frequency
-    delta = 0
-    wa = wc + delta  # atom frequency
-    g = wa  # coupling strength
-    N = 100  # number of cavity fock states
-    n = 25   # fock state occupy number of cavity
-    use_rwa = True  # rwa: rotating wave approximation
+    N = 20                  # number of cavity fock states
+    z = sqrt(4)             # fock occupy number or amplitude of coherent state
+    wav = (1, 1)            # Atom initial wavefuction e.g. (0, 1) is |0>
+    wc = 2.0 * 2 * pi       # cavity frequency
+    wa = 3.0 * 2 * pi       # atom frequency
+    chi = 0.025 * 2 * pi    # parameter in the dispersive hamiltonian >> g**2/delta
+    delta = abs(wc - wa)    # detuning
+    g = sqrt(delta * chi)   # coupling strength that is consistent with chi
+    # g = 0.5 * 2 * pi      # coupling strength that is consistent with chi
+    use_rwa = True          # rwa: rotating wave approximation
+    eff = True             # eff : use effective Hamiltonian
 
-    t = np.linspace(0, 5, 10001)  # time evolution
+    taulist = np.linspace(0, 50, 5001)  # time evolution
 
     # collapse operators
     kappa = 0.005  # cavity dissipation rate
@@ -22,41 +30,58 @@ if __name__ == '__main__':
     n_th_a = 0.0  # avg number of thermal bath excitation
 
     # initial state
-    psi = initial_coherent_state(N, n)
-    H = JCM_Hamiltonian(N, wc, wa, g, use_rwa)
+    if text == 'coherent':
+        psi0 = initial_coherent_state(N, z, wav)
+    elif text == 'fock':
+        psi0 = initial_fock_state(N, z, wav)
+    print('coupling strength g : %s' % g)
+    H = JCM_Hamiltonian(N, wc, wa, g, use_rwa, eff)
+    sm, sz, a, I = operator(N)
 
-    output = time_evolution(H, psi, t, N)
-    n_a = output.expect[0]
-    n_b = output.expect[1]
-    n_c = output.expect[2]
-    n_d = output.expect[3]
+    nc = a.dag() * a
+    xc = a.dag() + a
+    na = sm.dag() * sm
+
+    res = mesolve(H, psi0, taulist, [], [])
+
+    nc_list = expect(nc, res.states)
+    na_list = expect(na, res.states)
+    xc_list = expect(xc, res.states)
+    sz_list = expect(sz, res.states)
+
+    d = (delta / (2 * pi))
+    detuning = '  delta=%.2f * 2$\pi$' % d
 
     if use_rwa:
-        text_tilte = "jcm with rwa z = %s" % n
-        filename = "".join(['./fig/coherent_rwa_', '%s' % n])
+        text_tilte = "jcm with rwa z = %s" % z
+        filename = "".join(['./fig/', text, '_d%sz%s_rwa' % (int(d), int(z))])
     else:
-        text_tilte = "jcm without rwa z = %s" % n
-        filename = "".join(['./fig/coherent_', '%s' % n])
+        text_tilte = "jcm without rwa z = %s" % z
+        filename = "".join(['./fig/', text, '_d%sz%s' % (int(d), int(z))])
 
-    fig, axes = plt.subplots(1, 1, figsize=(10, 6))
-    axes.plot(g * t, n_a, label="pop inversion")
-    axes.legend(loc=0)
-    axes.set_xlabel('Time')
-    axes.set_ylabel('probability')
-    axes.set_title(text_tilte)
-    axes.text(0, 0, 'delta=%.2f' % delta)
-    axes.axis([0, 40, -1, 1])
-    plt.savefig(filename + '_z')
+    fig, axes = plt.subplots(2, 1, sharex=True, figsize=(12, 6))
+    fig.suptitle(text_tilte + detuning, fontsize=16)
+    axes[0].plot(taulist, nc_list, 'b', label="Cavity")
+    axes[0].plot(taulist, na_list, 'r', label="Atom")
+    axes[0].set_ylabel("n", fontsize=16)
+    axes[0].legend(loc=1)
+
+    # axes[1].set_ylabel("n", fontsize=16)
+    # axes[1].legend(loc=1)
+
+    axes[1].plot(taulist, xc_list, 'b', label="Cavity")
+    axes[1].set_ylabel("position", fontsize=16)
+    axes[1].set_xlabel('Time', fontsize=16)
+    axes[1].legend(loc=1)
+
+    plt.xlim(0, 50)
+    plt.tight_layout()
+    plt.subplots_adjust(top=0.9)
+    plt.savefig(filename, dpi=720)
     plt.show()
 
-    fig, axes = plt.subplots(1, 1, figsize=(10, 6))
-    axes.plot(g * t, n_b, label="excited")
-    axes.plot(g * t, n_c, label="ground")
-    axes.plot(g * t, n_d, label="norm")
-    axes.legend(loc=0)
-    axes.set_xlabel('Time')
-    axes.set_ylabel('probability')
-    axes.set_title(text_tilte)
-    axes.axis([0, 40, 0, 1.5])
-    plt.savefig(filename)
-    plt.show()
+    # for i, t in enumerate(taulist):
+    #     if i % 10 == 0:
+    #         rho_cavity = ptrace(res.states[i], 0)
+    #         plot_wigner(rho_cavity)
+    #         plt.savefig('./fig/winger/Winger%s.png' % i, dpi=720)
