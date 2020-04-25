@@ -4,14 +4,11 @@ from numpy import sqrt, pi, real
 from qutip import *
 from package.JCM import JCM_Hamiltonian, initial_coherent_state, operator, initial_fock_state
 
-
-
-N = 30                 # number of cavity fock states
+N = 15                 # number of cavity fock states
 z = sqrt(4)            # fock state occupy number of cavity
-z = 5
 wc = 2.0 * 2 * pi      # cavity frequency
 wa = 3.0 * 2 * pi      # atom frequency
-chi = 0.025 * 2 * pi   # parameter in the dispersive hamiltonian >> g**2/delta
+chi = 0.05 * 2 * pi   # parameter in the dispersive hamiltonian >> g**2/delta
 delta = abs(wc - wa)   # detuning
 g = sqrt(delta * chi)  # coupling strength that is consistent with chi
 # g = 0.5 * 2 * pi
@@ -69,12 +66,12 @@ plt.xlim(0, 50)
 plt.tight_layout()
 plt.show()
 
-# w1, S1 = spectrum_correlation_fft(taulist, g1)
-# fig, ax = plt.subplots(1, 1, figsize=(9, 3))
-# ax.plot(w1 / (2 * pi), abs(S1))
-# ax.set_xlabel(r'$\omega$', fontsize=18)
-# ax.set_xlim(wc/(2*pi)-.5, wc/(2*pi)+.5)
-# plt.show()
+w1, S1 = spectrum_correlation_fft(taulist, g1)
+fig, ax = plt.subplots(1, 1, figsize=(9, 3))
+ax.plot(w1 / (2 * pi), abs(S1))
+ax.set_xlabel(r'$\omega$', fontsize=18)
+ax.set_xlim(wc/(2*pi)-.5, wc/(2*pi)+.5)
+plt.show()
 
 fig, axes = plt.subplots(1, 1, sharex=True, figsize=(12,6))
 

@@ -116,12 +116,3 @@ def JCM_Hamiltonian(N, wc, wa, g, use_rwa=True, eff=False, tuple=False, number=1
     else:
         return H0, H1
 
-
-def time_evolution(H, psi, tlist, N, e_ops=None):
-    """
-    :param e_ops : expection operators
-    """
-    if e_ops is None:
-        e_ops = []
-    result = sesolve(H, psi, tlist, e_ops)
-    return result
