@@ -16,6 +16,7 @@ for Om in Om_list_TLS:
     H_TLS = Om * (sm_TLS + sm_TLS.dag())
     rho_ss_TLS.append(steadystate(H_TLS, c_op_TLS))
 
+
 # decompose the emitted light into the coherent and incoherent
 # portions
 I_c_TLS = expect(sm_TLS.dag(), rho_ss_TLS)*expect(sm_TLS, rho_ss_TLS)
