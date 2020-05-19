@@ -103,7 +103,7 @@ if __name__ == '__main__':
     # plt.savefig(filename + '.png', dpi=720)
     plt.show()
 
-    rho_cavity = ptrace(psi0.dag() * res.states[-1], 0)
+    rho_cavity = ptrace(res.states[-1], 0)
     # rho_cavity = ptrace(psi0, res.states[-1])
     plot_wigner(rho_cavity)
     # plt.savefig('./fig/winger_%s%s_d%.2f.png' % (wav[0], wav[1], d), dpi=720)
