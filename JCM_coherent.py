@@ -6,21 +6,29 @@ from package.JCM import JCM_Hamiltonian, operator
 from package.state import initial_state
 
 
-def fig_name(store='fig'):
+def fig_name():
+    # parameter name
+    wav_name = ''.join(['_', str(wav[0]), str(wav[1])])
+    parameter_name = "".join(['d%s' % int(d), fig_tilte, '%s' % int(z), wav_name])
     detuning = "".join([
-        '\n', 'delta=', '%.2f * 2$\pi$ ' % d, 'g =%.2f * 2$\pi$' % couple
+        '\n', 'delta= %.2f * 2$\pi$  g =%.2f * 2$\pi$' % (d, couple)
     ])
-    if use_rwa:
+    # filename = psi_text + parameter_name
+    if eff:
+        filename = parameter_name + '_eff'
+        parameter_name += '_eff'
+        text_tilte = "jcm %s = %s" % (fig_tilte, z)
+    elif use_rwa:
+        filename = parameter_name + '_rwa'
+        parameter_name += '_rwa'
         text_tilte = "jcm with rwa %s = %s" % (fig_tilte, z)
-        tilte = text_tilte + detuning
-        filename = "".join([
-            './', store, './', text, '_d%s' % int(d), fig_tilte, '%s_rwa' % int(z)])
     else:
         text_tilte = "jcm without rwa  %s = %s" % (fig_tilte, z)
-        tilte = text_tilte + detuning
-        filename = "".join([
-            './', store, './', text, '_d%s' % int(d), fig_tilte, '%s' % int(z)])
-    return tilte, filename
+        filename = parameter_name
+
+    filename = psi_text + filename
+    tilte = text_tilte + detuning
+    return tilte, filename, parameter_name
 
 
 def plot():
@@ -32,8 +40,8 @@ def plot():
     axes[0].legend(loc=1)
 
     axes[1].plot(taulist, na_list, 'r', label="Atom")
+    axes[1].set_ylim(0, 1.1)
     axes[1].set_ylabel("n", fontsize=16)
-    axes[1].set_ylim(0, 1)
     axes[1].legend(loc=1)
 
     axes[2].plot(taulist, xc_list, 'b', label="Cavity")
@@ -53,8 +61,9 @@ def plot():
 
 
 if __name__ == '__main__':
-    # text = 'fock'
-    text = 'coherent'
+    # psi_text = 'fock'
+    psi_text = 'coherent'
+    store = 'fig'  #store folder
     # initial parameters
     N = 20  # number of cavity fock states
     z = 2  # fock occupy number or amplitude of coherent state
@@ -63,8 +72,8 @@ if __name__ == '__main__':
     wa = 3.0 * 2 * pi  # atom frequency
     chi = 0.025 * 2 * pi  # parameter in the dispersive hamiltonian >> g**2/delta
     delta = abs(wc - wa)  # detuning
-    g = sqrt(delta * chi)  # coupling strength that is consistent with chi
-    # g = 0.1 * 2 * pi      # coupling strength that is consistent with chi
+    # g = sqrt(delta * chi)  # coupling strength that is consistent with chi
+    g = 0.16 * 2 * pi      # coupling strength that is consistent with chi
     use_rwa = False  # rwa: rotating wave approximation
     eff = True  # eff : use effective Hamiltonian
 
@@ -76,7 +85,7 @@ if __name__ == '__main__':
     n_th = 0.0  # avg number of thermal bath excitation
 
     # initial state
-    psi0, fig_tilte = initial_state(text, N, z=z, wav=wav)
+    psi0, fig_tilte = initial_state(psi_text, N, z=z, wav=wav)
 
     print('coupling strength g : %s' % g)
     H = JCM_Hamiltonian(N, wc, wa, g, use_rwa, eff)
@@ -98,13 +107,26 @@ if __name__ == '__main__':
     d = (delta / (2 * pi))
     couple = (g / (2 * pi))
 
-    tilte, filename = fig_name()
+    path = "".join(['./', store, '/'])
+
+    tilte, filename, parameter_name = fig_name()
+
     plot()
-    # plt.savefig(filename + '.png', dpi=720)
+    # plt.savefig(path+filename, dpi=720)
     plt.show()
 
-    rho_cavity = ptrace(res.states[-1], 0)
-    # rho_cavity = ptrace(psi0, res.states[-1])
+    rho_cavity = ptrace(res.states[50], 0)
     plot_wigner(rho_cavity)
-    # plt.savefig('./fig/winger_%s%s_d%.2f.png' % (wav[0], wav[1], d), dpi=720)
+    # plt.savefig(path+'winger_'+parameter_name, dpi=720)
     plt.show()
+
+    # plot_wigner(res.states[-1])
+    # plt.savefig(path+'psi_winger_'+parameter_name, dpi=720)
+    # plt.show()
+
+    rho_cavity_i = ptrace(psi0, 0)
+    fig, axes = plt.subplots(1, 2, figsize=(12, 6))
+    plot_fock_distribution(rho_cavity_i, ax=axes[0])
+    plot_fock_distribution(rho_cavity, ax=axes[1])
+    plt.show()
+
