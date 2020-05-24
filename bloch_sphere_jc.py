@@ -18,7 +18,7 @@ H0 = delta / 2.0 * sigmax()
 H1 = v / 2.0 * sigmaz()
 
 
-psi0 = basis(2, 0)
+psi0 = basis(2, 1)
 
 sm = destroy(2)
 sx = sigmax()

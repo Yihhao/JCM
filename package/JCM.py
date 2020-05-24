@@ -73,7 +73,7 @@ def operator(N, number=1):
     return sm, sz, a, I
 
 
-def JCM_Hamiltonian(N, wc, wa, g, use_rwa=True, eff=False, tuple=False, number=1):
+def JCM_Hamiltonian(N, wc, wa, g=None, use_rwa=True, eff=False, tuple=False, number=1):
     """
     Jaynes–Cummings model Hamiltonian
 
@@ -105,14 +105,14 @@ def JCM_Hamiltonian(N, wc, wa, g, use_rwa=True, eff=False, tuple=False, number=1
         H1 = xmi * (a.dag() * a + 0.5 * I) * sz
     elif use_rwa is True:
         H0 = wc * a.dag() * a + 0.5 * wa * sz
-        H1 = g * (sm.dag() * a + sm * a.dag())
+        H1 = (sm.dag() * a + sm * a.dag())
     else:
         H0 = wc * a.dag() * a + 0.5 * wa * sz
-        H1 = g * (sm.dag() + sm) * (a + a.dag())
+        H1 = (sm.dag() + sm) * (a + a.dag())
 
-    if tuple is False:
-        H = H0 + H1
-        return H
-    else:
+    if tuple is True or g is None:
         return H0, H1
+    else:
+        H = H0 + g * H1
+        return H
 
