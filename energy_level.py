@@ -77,7 +77,7 @@ if __name__ == '__main__':
     N = 20  # number of cavity fock states
     wc = 1.0 * 2 * pi  # cavity frequency
     wa = 1.05 * 2 * pi  # atom frequency
-    g = 0.05 * 2 * pi  # coupling strength
+    g = 0.04 * 2 * pi  # coupling strength
     use_rwa = False  # rwa: rotating wave approximation
     plot_range = 7
     savefig = False

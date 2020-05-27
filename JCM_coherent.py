@@ -11,7 +11,7 @@ def fig_name():
     wav_name = ''.join(['_', str(wav[0]), str(wav[1])])
     parameter_name = "".join(['d%s' % int(d), fig_tilte, '%s' % int(z), wav_name])
     detuning = "".join([
-        '\n', 'delta= %.2f * 2$\pi$  g =%.2f * 2$\pi$' % (d, couple)
+        '\n', r'$\Delta= %.2f * 2\pi \qquad g =%.2f * 2\pi$' % (d, couple)
     ])
     # filename = psi_text + parameter_name
     if eff:
@@ -35,28 +35,31 @@ def plot():
     fig, axes = plt.subplots(4, 1, sharex=True, figsize=(12, 8))
     fig.suptitle(tilte, fontsize=16)
     axes[0].plot(taulist, nc_list, 'b', label="Cavity")
-    axes[0].plot(taulist, na_list, 'r', label="Atom")
-    axes[0].set_ylabel("n", fontsize=16)
+    # axes[0].plot(taulist, na_list, 'r', label="Atom")
+    # axes[0].set_ylim(0, 3.5)
+    axes[0].set_ylabel("average \n photon number", fontsize=14)
+    # axes[0].set_ylabel("Occupation probability", fontsize=14)
     axes[0].legend(loc=1)
 
     axes[1].plot(taulist, na_list, 'r', label="Atom")
     axes[1].set_ylim(0, 1.1)
-    axes[1].set_ylabel("n", fontsize=16)
+    # axes[1].set_ylabel("n", fontsize=16)
+    axes[1].set_ylabel("Occupation \n probability", fontsize=14)
     axes[1].legend(loc=1)
 
     axes[2].plot(taulist, xc_list, 'b', label="Cavity")
-    axes[2].set_ylabel("position", fontsize=16)
+    axes[2].set_ylabel("Position", fontsize=14)
     axes[2].legend(loc=1)
 
     axes[3].plot(taulist, na_list, 'r', label='excited state')
     axes[3].plot(taulist, ground_list, 'b', label="ground state")
-    axes[3].set_ylabel('Probability', fontsize=16)
-    axes[3].set_xlabel('Time', fontsize=16)
-    axes[3].set_ylim(0, 1.1)
+    axes[3].set_ylabel('Probability', fontsize=14)
+    axes[3].set_xlabel('Time', fontsize=14)
+    axes[3].set_ylim(-0.05, 1.05)
     axes[3].legend(loc=1)
 
     plt.xlim(0, taulist[-1])
-    plt.tight_layout()
+    fig.tight_layout()
     plt.subplots_adjust(top=0.9)
 
 
@@ -66,16 +69,14 @@ if __name__ == '__main__':
     store = 'fig'  #store folder
     # initial parameters
     N = 20  # number of cavity fock states
-    z = 2  # fock occupy number or amplitude of coherent state
-    wav = (1, 1)  # Atom initial wavefuction e.g. (0, 1) is |0>
-    wc = 2.0 * 2 * pi  # cavity frequency
-    wa = 3.0 * 2 * pi  # atom frequency
-    chi = 0.025 * 2 * pi  # parameter in the dispersive hamiltonian >> g**2/delta
+    z = 1.7  # fock occupy number or amplitude of coherent state
+    wav = (1, 0)  # Atom initial wavefuction e.g. (0, 1) is |0>
+    wc = 1.0 * 2 * pi  # cavity frequency
+    wa = 2.0 * 2 * pi  # atom frequency
     delta = abs(wc - wa)  # detuning
-    # g = sqrt(delta * chi)  # coupling strength that is consistent with chi
-    g = 0.16 * 2 * pi      # coupling strength that is consistent with chi
-    use_rwa = False  # rwa: rotating wave approximation
-    eff = True  # eff : use effective Hamiltonian
+    g = 0.05 * 2 * pi      # coupling strength that is consistent with chi
+    use_rwa = False# rwa: rotating wave approximation
+    eff = False  # eff : use effective Hamiltonian
 
     taulist = np.linspace(0, 50, 5001)  # time evolution
 
@@ -99,10 +100,9 @@ if __name__ == '__main__':
 
     res = mesolve(H, psi0, taulist, [], [])
 
-    nc_list = expect(nc, res.states)
-    na_list = expect(na, res.states)
-    xc_list = expect(xc, res.states)
-    ground_list = expect(ground, res.states)
+    expt_op = [nc, na, xc, ground]
+    expt_list = expect(expt_op, res.states)
+    nc_list, na_list, xc_list, ground_list = expt_list
 
     d = (delta / (2 * pi))
     couple = (g / (2 * pi))
@@ -112,21 +112,22 @@ if __name__ == '__main__':
     tilte, filename, parameter_name = fig_name()
 
     plot()
-    # plt.savefig(path+filename, dpi=720)
+    # plt.tight_layout()
+    plt.savefig(path+filename, dpi=720)
     plt.show()
 
     rho_cavity = ptrace(res.states[50], 0)
     plot_wigner(rho_cavity)
-    # plt.savefig(path+'winger_'+parameter_name, dpi=720)
+    plt.savefig(path+'winger_'+parameter_name, dpi=720)
     plt.show()
 
     # plot_wigner(res.states[-1])
     # plt.savefig(path+'psi_winger_'+parameter_name, dpi=720)
     # plt.show()
 
-    rho_cavity_i = ptrace(psi0, 0)
-    fig, axes = plt.subplots(1, 2, figsize=(12, 6))
-    plot_fock_distribution(rho_cavity_i, ax=axes[0])
-    plot_fock_distribution(rho_cavity, ax=axes[1])
-    plt.show()
+    # rho_cavity_i = ptrace(psi0, 0)
+    # fig, axes = plt.subplots(1, 2, figsize=(12, 6))
+    # plot_fock_distribution(rho_cavity_i, ax=axes[0])
+    # plot_fock_distribution(rho_cavity, ax=axes[1])
+    # plt.show()
 
