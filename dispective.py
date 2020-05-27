@@ -33,10 +33,10 @@ H = JCM_Hamiltonian(N, wr, wq, g, eff=True)
 # Try different initial state of the resonator,
 # and see how the spectrum further down in the notebook reflects the photon distribution chosen here.
 # """
-# psi0 = tensor(coherent(N, sqrt(6)), (basis(2,0)+basis(2,1)).unit())
+psi0 = tensor(coherent(N, sqrt(6)), (basis(2,0)+basis(2,1)).unit())
 # psi0 = tensor(thermal_dm(N, 3), ket2dm(basis(2,0)+basis(2,1))).unit()
 # psi0 = tensor(coherent(N, sqrt(4)), (basis(2,0)+basis(2,1)).unit())
-psi0 = initial_coherent_state(N, z=sqrt(4), wav=(1, 1))
+# psi0 = initial_coherent_state(N, z=sqrt(4), wav=(1, 1))
 # psi0 = initial_fock_state(N, n=0)
 plot_fock_distribution(psi0)
 plt.show()
