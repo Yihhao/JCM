@@ -60,6 +60,7 @@ def main(N, wc, wa, g, use_rwa, plot_range, savefig):
     H0, Hint = JCM_Hamiltonian(N, wc, wa, g, use_rwa, tuple=True)
 
     H = H0 + g * Hint
+    # H = H0 + Hint
     eval = H0.eigenenergies(eigvals=5)
     print(f'No interatcion:{eval - eval[0]}')
     eval = H.eigenenergies(eigvals=5)
@@ -67,6 +68,7 @@ def main(N, wc, wa, g, use_rwa, plot_range, savefig):
 
     plot_line = 5
     plot_dispective([H0, g*Hint], plot_line=plot_line, wa=wa, wc=wc, g=g)
+    # plot_dispective([H0, Hint], plot_line=plot_line, wa=wa, wc=wc, g=g)
     plt.tight_layout()
     if savefig:
         plt.savefig('./fig/energy_level3_5.png')
@@ -76,9 +78,10 @@ if __name__ == '__main__':
     # parameters
     N = 20  # number of cavity fock states
     wc = 1.0 * 2 * pi  # cavity frequency
-    wa = 1.05 * 2 * pi  # atom frequency
-    g = 0.04 * 2 * pi  # coupling strength
+    wa = 2.2 * 2 * pi  # atom frequency
+    g = 0.105 * 2 * pi  # coupling strength
     use_rwa = False  # rwa: rotating wave approximation
     plot_range = 7
     savefig = False
     main(N, wc, wa, g, use_rwa, plot_range, savefig)
+

@@ -107,7 +107,7 @@ def myplot_energy_levels(H_list, N=0, labels=None, show_ylabels=False,
     return fig, ax
 
 
-def plot_dispective(H_list, plot_line=0, wa=0, wc=0, g=0,
+def plot_dispective(H_list, plot_line=5, wa=0, wc=0, g=0,
                     labels=None, show_ylabels=True,
                     figsize=(8, 12), fig=None, ax=None):
     """
@@ -185,13 +185,27 @@ def plot_dispective(H_list, plot_line=0, wa=0, wc=0, g=0,
             y_ticks.append('|%s, e>, |%s g>' % (i - 1, i))
         plt.yticks(y_position, y_ticks, fontsize=16)
     else:
-        for i in np.arange(0, plot_line // 2 + 1):
-            y_position.append(i * wc)
-            y_ticks.append('|%s, g>' % i)
-            if i < plot_line // 2:
-                y_position.append(i * wc + wa)
-                y_ticks.append('|%s, e>' % i)
-            plt.yticks(y_position, y_ticks, fontsize=16)
+        y_position.append(0)
+        y_ticks.append('|0, g>')
+        i = 1
+        j = 1
+        omega = 0
+        while i < plot_line:
+            omega = 0
+            if omega + i * wc < j * wc + wa:
+                omega += i * wc
+                state = 'g'
+                y_position.append(omega)
+                y_ticks.append('|%s, g>' % i)
+            else:
+                omega += j * wa
+                state = 'e'
+                y_position.append(omega)
+                y_ticks.append('|%s, e>' % j)
+                j += 1
+            i += 1
+
+        plt.yticks(y_position, y_ticks, fontsize=16)
         plt.annotate(s='', xy=(0.5, wa), xytext=(0.5, wc)
                      , arrowprops=dict(arrowstyle='<->'))
         plt.text(0.7, delta / 2 + wc - 0.1, r'$\Delta$',
