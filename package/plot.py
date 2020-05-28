@@ -185,26 +185,17 @@ def plot_dispective(H_list, plot_line=5, wa=0, wc=0, g=0,
             y_ticks.append('|%s, e>, |%s g>' % (i - 1, i))
         plt.yticks(y_position, y_ticks, fontsize=16)
     else:
-        y_position.append(0)
-        y_ticks.append('|0, g>')
-        i = 1
-        j = 1
-        omega = 0
-        while i < plot_line:
-            omega = 0
-            if omega + i * wc < j * wc + wa:
-                omega += i * wc
-                state = 'g'
-                y_position.append(omega)
+        i, j, k = 0, 0, 0
+        while k < plot_line:
+            if i * wc < j * wc + wa:
+                y_position.append(i * wc)
                 y_ticks.append('|%s, g>' % i)
+                i += 1
             else:
-                omega += j * wa
-                state = 'e'
-                y_position.append(omega)
+                y_position.append(wa + j * wc)
                 y_ticks.append('|%s, e>' % j)
                 j += 1
-            i += 1
-
+            k += 1
         plt.yticks(y_position, y_ticks, fontsize=16)
         plt.annotate(s='', xy=(0.5, wa), xytext=(0.5, wc)
                      , arrowprops=dict(arrowstyle='<->'))

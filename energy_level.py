@@ -82,6 +82,6 @@ if __name__ == '__main__':
     g = 0.105 * 2 * pi  # coupling strength
     use_rwa = False  # rwa: rotating wave approximation
     plot_range = 7
-    savefig = False
+    savefig = True
     main(N, wc, wa, g, use_rwa, plot_range, savefig)
 
