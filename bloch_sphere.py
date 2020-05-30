@@ -19,8 +19,8 @@ from numpy import pi, cos, sin
 #     return t + cos(2 * w * t)
 
 def H1_coeff(t, args):
-    w = 5 * pi / 6
-    return -2 * cos(w * t)
+    w = 1.0 * 2 * pi
+    return t
 
 # def H2_coeff(t, args):
 #     w = 5 * pi / 6
@@ -37,7 +37,7 @@ def H1_coeff(t, args):
 # parameters
 N = 3
 wc = 1.0 * 2 * pi
-wa = 1.0 * 2 * pi
+wa = 2.0 * 2 * pi
 g = 0.05 * 2 * pi
 use_rwa = False
 
@@ -49,12 +49,12 @@ sz = sigmaz()
 
 psi0 = basis(2, 0)
 
-H0 = wa / 2 * sz
+# H0 = wa / 2 * sz
 # H1 = g / 4 * sx
 # H = [[H1, H1_coeff]]
-H1 = g / 2 * (sm + sm.dag())
+H1 = g / 2 * sx
 # H2 = sm.dag()
-H = [H0, [H1, H1_coeff]]
+H = [[H1, H1_coeff]]
 
 tlist = np.linspace(0, 10.0, 150)
 res = mesolve(H, psi0, tlist, [], [])

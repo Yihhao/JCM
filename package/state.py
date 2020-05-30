@@ -17,4 +17,5 @@ def initial_state(text, N=None, **kwargs):
         psi0 = initial_fock_state(N, z, wav)
     else:
         psi0 = 0
+        fig_tilte = ''
     return psi0, fig_tilte

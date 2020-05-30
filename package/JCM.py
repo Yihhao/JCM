@@ -1,7 +1,7 @@
 from qutip import *
 
 
-def initial_fock_state(N, n=0, wav=(0, 1), number=1):
+def initial_fock_state(N, n=0, wav=(0, 1)):
     """
     default initial state is |0,1> it mean cavity |0> state and atom |1> state.
 
@@ -20,12 +20,12 @@ def initial_fock_state(N, n=0, wav=(0, 1), number=1):
     """
     # TLS: two level system
     TLS = (wav[0] * basis(2, 0) + wav[1] * basis(2, 1)).unit()  # initial state  0*|0> + 1*|1>
-    fock = basis(N, n)  # fock state for cavity
-    psi = tensor(fock, TLS).unit()
+    fock_st = basis(N, n)  # fock state for cavity
+    psi = tensor(fock_st, TLS).unit()
     return psi
 
 
-def initial_coherent_state(N, z=0., wav=(1, 0), number=1):
+def initial_coherent_state(N, z=0., wav=(1, 0)):
     """
     default initial state is |0,0> it mean cavity coherent state and atom |0> state.
 
@@ -73,7 +73,7 @@ def operator(N, number=1):
     return sm, sz, a, I
 
 
-def JCM_Hamiltonian(N, wc, wa, g=None, use_rwa=True, eff=False, tuple=False, number=1):
+def JCM_Hamiltonian(N, wc, wa, g=None, use_rwa=True, eff=False, tuple=False):
     """
     Jaynes–Cummings model Hamiltonian
 
@@ -95,7 +95,7 @@ def JCM_Hamiltonian(N, wc, wa, g=None, use_rwa=True, eff=False, tuple=False, num
         return a Hamiltonian or [H0, Hint]?
     """
 
-    sm, sz, a, I = operator(N, number)
+    sm, sz, a, I = operator(N, number=1)
     # define Hamiltonian
 
     if eff is True:
@@ -115,4 +115,3 @@ def JCM_Hamiltonian(N, wc, wa, g=None, use_rwa=True, eff=False, tuple=False, num
     else:
         H = H0 + g * H1
         return H
-

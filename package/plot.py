@@ -163,7 +163,7 @@ def plot_dispective(H_list, plot_line=5, wa=0, wc=0, g=0,
         labels = [r'$g=0$', r'$g\neq 0$']
     fig, ax = myplot_energy_levels(H_list, N=plot_line,
                                    labels=labels, show_ylabels=show_ylabels,
-                                   figsize=figsize, fig=None, ax=None)
+                                   figsize=figsize, fig=fig, ax=ax)
     delta = wa - wc
 
     y_ticks = []
@@ -176,8 +176,8 @@ def plot_dispective(H_list, plot_line=5, wa=0, wc=0, g=0,
                 y_ticks.append('|%s, g>' % i)
                 continue
             dispective = np.sqrt(i) * g
-            plt.annotate(s='', xy=(4, i * wc - dispective), xytext=(4, i * wc + dispective)
-                         , arrowprops=dict(arrowstyle='<->'))
+            plt.annotate(s='', xy=(4, i * wc - dispective), xytext=(4, i * wc + dispective),
+                         arrowprops=dict(arrowstyle='<->'))
             y = 0.05 * i - 0.2  # plot text position
             plt.text(4.2, i * wc + y, r'$\sqrt{%s}2g$' % i,
                      fontdict={'size': 16, 'color': 'k'})
@@ -197,17 +197,17 @@ def plot_dispective(H_list, plot_line=5, wa=0, wc=0, g=0,
                 j += 1
             k += 1
         plt.yticks(y_position, y_ticks, fontsize=16)
-        plt.annotate(s='', xy=(0.5, wa), xytext=(0.5, wc)
-                     , arrowprops=dict(arrowstyle='<->'))
+        plt.annotate(s='', xy=(0.5, wa), xytext=(0.5, wc),
+                     arrowprops=dict(arrowstyle='<->'))
         plt.text(0.7, delta / 2 + wc - 0.1, r'$\Delta$',
                  fontdict={'size': 16, 'color': 'k'})
 
-    plt.annotate(s='', xy=(1, wc), xytext=(1, 0)
-                 , arrowprops=dict(arrowstyle='<->'))
+    plt.annotate(s='', xy=(1, wc), xytext=(1, 0),
+                 arrowprops=dict(arrowstyle='<->'))
     plt.text(1.2, wc / 2, r'$\omega_c$',
              fontdict={'size': 16, 'color': 'k'})
     plt.text(1.7, wa / 2, r'$\omega_a$',
              fontdict={'size': 16, 'color': 'k'})
-    plt.annotate(s='', xy=(1.5, wa), xytext=(1.5, 0)
-                 , arrowprops=dict(arrowstyle='<->'))
+    plt.annotate(s='', xy=(1.5, wa), xytext=(1.5, 0),
+                 arrowprops=dict(arrowstyle='<->'))
     return fig, ax

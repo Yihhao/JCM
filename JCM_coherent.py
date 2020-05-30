@@ -91,7 +91,9 @@ if __name__ == '__main__':
     print('coupling strength g : %s' % g)
     H = JCM_Hamiltonian(N, wc, wa, g, use_rwa, eff)
     sm, sz, a, I = operator(N)
-    c_ops = [sqrt(kappa * (1 + n_th)) * a, sqrt(kappa * n_th) * a.dag()]
+    c_ops = [sqrt(kappa * (1 + n_th)) * a,
+             sqrt(kappa * n_th) * a.dag(),
+             np.sqrt(gamma) * sm]
 
     nc = a.dag() * a
     xc = a.dag() + a
@@ -113,13 +115,15 @@ if __name__ == '__main__':
 
     plot()
     # plt.tight_layout()
-    plt.savefig(path+filename, dpi=720)
+    # plt.savefig(path+filename, dpi=720)
     plt.show()
 
-    rho_cavity = ptrace(res.states[50], 0)
-    plot_wigner(rho_cavity)
-    plt.savefig(path+'winger_'+parameter_name, dpi=720)
-    plt.show()
+    gnd_e, gndv = H.groundstate()
+
+    # rho_cavity = ptrace(res.states[50], 0)
+    # plot_wigner(rho_cavity)
+    # plt.savefig(path+'winger_'+parameter_name, dpi=720)
+    # plt.show()
 
     # plot_wigner(res.states[-1])
     # plt.savefig(path+'psi_winger_'+parameter_name, dpi=720)
