@@ -68,16 +68,15 @@ def plot_energy_e(evals_mat, walist, wc, g, delta, plot_range, plot_line,
             if n == 1:
                 style = c[i // 2] + style
                 y = (rung[i] - rung[0] - wc) / g
-                ax.plot(delta / g, y, style, linewidth=3)
+                ax.plot(delta / g, y, style, linewidth=3, label='0 -> %s' % i)
                 # ax.plot(delta / g, y, label='0 -> %s' % i)
             else:
                 pre_n = (n - 1)
                 y1 = (rung[i] - rung[2 * pre_n - 1] - wc) / g
-                ax.plot(delta / g, y1, 'g' + style)
+                ax.plot(delta / g, y1, 'g' + style, label='%s -> %s' % (2 * pre_n - 1, i))
                 y2 = (rung[i] - rung[2 * pre_n] - wc) / g
-                ax.plot(delta / g, y2, 'b' + style)
-                # ax.plot(delta / g, y1, label='%s -> %s' % (2 * pre_n - 1, i))
-                # ax.plot(delta / g, y2, label='%s -> %s' % (2 * pre_n, i))
+                ax.plot(delta / g, y2, 'b' + style, label='%s -> %s' % (2 * pre_n, i))
+
 
     plt.xlim(-1 * plot_range, plot_range)
     plt.ylim(-4, 4)

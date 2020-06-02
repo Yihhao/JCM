@@ -2,7 +2,7 @@ from package import *
 import matplotlib.pyplot as plt
 
 
-def myplot_energy_levels(H_list, N=0, labels=None, show_ylabels=False,
+def plot_energy_specturm(H_list, N=0, labels=None, show_ylabels=False,
                          figsize=(8, 12), fig=None, ax=None):
     """
     Plot the energy level diagrams for a list of Hamiltonians. Include
@@ -161,7 +161,7 @@ def plot_dispective(H_list, plot_line=5, wa=0, wc=0, g=0,
     """
     if labels is None:
         labels = [r'$g=0$', r'$g\neq 0$']
-    fig, ax = myplot_energy_levels(H_list, N=plot_line,
+    fig, ax = plot_energy_specturm(H_list, N=plot_line,
                                    labels=labels, show_ylabels=show_ylabels,
                                    figsize=figsize, fig=fig, ax=ax)
     delta = wa - wc

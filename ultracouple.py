@@ -80,7 +80,7 @@ axes[0].legend(loc=0)
 
 axes[1].plot(g_vec/(2*pi), entropy_cavity, 'b', label="cavity", linewidth=2)
 axes[1].plot(g_vec/(2*pi), entropy_atom, 'r--', label="atom", linewidth=2)
-axes[1].set_ylim(0,1)
+axes[1].set_ylim(0, 1)
 axes[1].set_ylabel("entropy", fontsize=16)
 axes[1].set_xlabel("coupling strength(g)", fontsize=16)
 axes[1].legend(loc=0)

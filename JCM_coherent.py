@@ -70,12 +70,12 @@ if __name__ == '__main__':
     # initial parameters
     N = 20  # number of cavity fock states
     z = 1.7  # fock occupy number or amplitude of coherent state
-    wav = (1, 0)  # Atom initial wavefuction e.g. (0, 1) is |0>
+    wav = (1, 1)  # Atom initial wavefuction e.g. (0, 1) is |0>
     wc = 1.0 * 2 * pi  # cavity frequency
-    wa = 2.0 * 2 * pi  # atom frequency
+    wa = 2.2 * 2 * pi  # atom frequency
     delta = abs(wc - wa)  # detuning
     g = 0.05 * 2 * pi      # coupling strength that is consistent with chi
-    use_rwa = False# rwa: rotating wave approximation
+    use_rwa = True# rwa: rotating wave approximation
     eff = False  # eff : use effective Hamiltonian
 
     taulist = np.linspace(0, 50, 5001)  # time evolution
@@ -115,15 +115,15 @@ if __name__ == '__main__':
 
     plot()
     # plt.tight_layout()
-    # plt.savefig(path+filename, dpi=720)
+    plt.savefig(path+filename, dpi=720)
     plt.show()
 
     gnd_e, gndv = H.groundstate()
 
-    # rho_cavity = ptrace(res.states[50], 0)
-    # plot_wigner(rho_cavity)
-    # plt.savefig(path+'winger_'+parameter_name, dpi=720)
-    # plt.show()
+    rho_cavity = ptrace(res.states[-1], 0)
+    plot_wigner(rho_cavity)
+    plt.savefig(path+'winger_'+parameter_name, dpi=720)
+    plt.show()
 
     # plot_wigner(res.states[-1])
     # plt.savefig(path+'psi_winger_'+parameter_name, dpi=720)
