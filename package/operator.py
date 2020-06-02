@@ -1,11 +1,17 @@
-from numpy import sqrt, zeros, array, arange
+from numpy import sqrt, zeros, array, arange, tensordot
+
+
+def density_mtrix(psi):
+    psi = psi.reshape(len(psi), 1)
+    d = tensordot(psi, psi, axes=([1], [1]))
+    return d
 
 
 def dagger(matrix):
     return matrix.conj().T
 
 
-def destory_op(N):
+def destroy_op(N):
     """annihilation operator for SHO"""
     a = zeros([N, N], dtype=float)
     for i in arange(1, N):
