@@ -1,7 +1,4 @@
 from package import *
-from numpy import arange
-from package.operator import density_mtrix
-import matplotlib.pyplot as plt
 
 
 def plot_energy_specturm(H_list, N=0, labels=None, show_ylabels=False,
@@ -221,7 +218,7 @@ def plot_fock_number(rho0, fig=None, ax=None, figsize=(8, 6)):
     if len(rho0.shape) == 1:
         rho0.reshape([len(rho0), 1])
     if rho0.shape[0] != rho0.shape[1]:
-        rho0 = density_mtrix(rho0)
+        rho0 = density_matrix(rho0)
     N = rho0.shape[0]
     for i in arange(N):
         ax.bar(i, rho0.real[i, i],

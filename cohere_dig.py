@@ -1,15 +1,47 @@
 from qutip import *
 from package.state import coherent_state, fock_state, tensorproduct
-from package.operator import destroy_op, dagger, sigmax_op
+from package.operator import destroy_op, dagger, sigmax_op, density_mtrix
 import matplotlib.pyplot as plt
 import scipy.linalg as LA
 from scipy.linalg import expm
-from numpy import sqrt, zeros, array, tensordot, arange
+from numpy import sqrt, zeros, array, tensordot, arange, real
 from package.plot import plot_fock_number
 import matplotlib as mpl
 import numpy as np
 import matplotlib.pyplot as plt
 
+
+def expct_value(operator, state):
+    if len(state) == 1 and len(operator) == 1:
+        if operator.shape[0] != operator.shape[0]:
+            raise TypeError("input operator dimension must be same [N,N]")
+        temp = tensordot(operator, state, axes=[[1], [0]])
+        value = tensordot(state, temp, axes=[[0], [0]])
+    elif len(operator) == 1:
+        value = zeros([len(state)], dtype=complex)
+        if operator.shape[0] != operator.shape[0]:
+            raise TypeError("input operator dimension must be same [N,N]")
+        for idx, s in enumerate(state):
+            temp = tensordot(operator, s, axes=[[1], [0]])
+            value[idx] = tensordot(s, temp, axes=[[0], [0]])
+    else:
+        value = zeros([len(operator), len(state)], dtype=complex)
+        for iop, op in enumerate(operator):
+            if op.shape[0] != op.shape[0]:
+                raise TypeError("input operator dimension must be same [N,N]")
+            for idx, s in enumerate(state):
+                temp = tensordot(op, s, axes=[[1], [0]])
+                value[iop, idx] = tensordot(s, temp, axes=[[0], [0]])
+    return value
+
+
+def vn_entropy(rho):
+    if len(rho.shape) == 1:
+        rho.reshape([len(rho), 1])
+    if rho.shape[0] != rho.shape[1]:
+        rho = density_mtrix(rho)
+        entropy = -1 * (rho * np.log(rho)).trace
+    return entropy
 
 
 # N = 20
@@ -19,12 +51,6 @@ import matplotlib.pyplot as plt
 # fig, ax = plot_fock_distribution(psi0)
 # ax.set_xticks(np.arange(N + 1), minor=False)
 # # plt.savefig('./fig/coherent.png')
-# plt.show()
-
-# print(coherent_state(5, 3))
-# print(coherent(5, 3))
-# rho0 = coherent_state(5, 1.0)
-# plot_fock_number(rho0)
 # plt.show()
 
 # plot_wigner(psi0)
@@ -41,15 +67,27 @@ import matplotlib.pyplot as plt
 # print(destroy_op(5))
 N = 5
 z = 1.0
-# h0 = tensorproduct(destroy_op(N), sigmax_op()).reshape(2*N, 2*N)
-# H = tensor(destroy(N), sigmax())
-# dH = LA.norm(h0-H.full())
-# print(dH)
-s = tensorproduct(coherent_state(N, 1.0), fock_state(2, 1))
-sp = tensor(coherent(N, 1.0), fock(2, 1))
-print(s.reshape(10, 1))
-print(sp)
-ds = LA.norm(s.reshape(10, 1)-sp.full())
-print(ds)
+
+a = dagger(destroy_op(N))
+psi0 = fock_state(N, 0)
+psi1 = fock_state(N, 2)
+psi2 = fock_state(N, 1)
+state1 = [psi0, psi1, psi2]
+# v = tensordot(a, psi0, axes=[[1], [0]])
+# print(v)
+#
+# v = tensordot(psi0, v, axes=[[0], [0]])
+# print(v)
+v = expct_value(a, state1)
+print(v)
+
+a = destroy(N)
+# na = a * a.dag()
+psi0 = fock(N, 0)
+psi1 = fock(N, 2)
+psi2 = fock(N, 1)
+state2 = [psi0, psi1, psi2]
+v = expect(a, state2)
+print(v)
 
 

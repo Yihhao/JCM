@@ -1,14 +1,4 @@
-from numpy import sqrt, zeros, array, arange, tensordot
-
-
-def density_mtrix(psi):
-    psi = psi.reshape(len(psi), 1)
-    d = tensordot(psi, psi, axes=([1], [1]))
-    return d
-
-
-def dagger(matrix):
-    return matrix.conj().T
+from package import *
 
 
 def destroy_op(N):
