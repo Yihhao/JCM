@@ -1,49 +1,40 @@
 from qutip import *
-from package.state import coherent_state, fock_state, tensorproduct
-from package.operator import destroy_op, dagger, sigmax_op, density_mtrix
-import matplotlib.pyplot as plt
-import scipy.linalg as LA
-from scipy.linalg import expm
-from numpy import sqrt, zeros, array, tensordot, arange, real
+from package import *
+from package.state import coherent_state, fock_state
+from package.operator import destroy_op, sigmax_op
 from package.plot import plot_fock_number
 import matplotlib as mpl
 import numpy as np
-import matplotlib.pyplot as plt
-
-
-def expct_value(operator, state):
-    if len(state) == 1 and len(operator) == 1:
-        if operator.shape[0] != operator.shape[0]:
-            raise TypeError("input operator dimension must be same [N,N]")
-        temp = tensordot(operator, state, axes=[[1], [0]])
-        value = tensordot(state, temp, axes=[[0], [0]])
-    elif len(operator) == 1:
-        value = zeros([len(state)], dtype=complex)
-        if operator.shape[0] != operator.shape[0]:
-            raise TypeError("input operator dimension must be same [N,N]")
-        for idx, s in enumerate(state):
-            temp = tensordot(operator, s, axes=[[1], [0]])
-            value[idx] = tensordot(s, temp, axes=[[0], [0]])
-    else:
-        value = zeros([len(operator), len(state)], dtype=complex)
-        for iop, op in enumerate(operator):
-            if op.shape[0] != op.shape[0]:
-                raise TypeError("input operator dimension must be same [N,N]")
-            for idx, s in enumerate(state):
-                temp = tensordot(op, s, axes=[[1], [0]])
-                value[iop, idx] = tensordot(s, temp, axes=[[0], [0]])
-    return value
 
 
 def vn_entropy(rho):
     if len(rho.shape) == 1:
         rho.reshape([len(rho), 1])
     if rho.shape[0] != rho.shape[1]:
-        rho = density_mtrix(rho)
+        rho = density_matrix(rho)
         entropy = -1 * (rho * np.log(rho)).trace
     return entropy
 
 
+def compute(N, walist, wc, g, use_rwa):
+    evals_mat = np.zeros((len(walist), N * 2))
+    for index, wa in enumerate(walist):
+        H0 = wc * nc + 0.5 * dot(wa, sz)
+        H1 = dot(sx, a + dagger(a))
+        H = H0 + g * H1
+        # evaluate the Hamiltonian
+        # H = JCM_Hamiltonian(N, wc, wa, g, use_rwa)
+        # find the energy eigenvalues of the composite system
+        # evals, ekets =LA.eigh(H) H.eigenstates()
+        evals, ekets = LA.eigh(H)
+
+        evals_mat[index, :] = np.real(evals)
+
+    return evals_mat
+
+nc = 1
+sx = 1
+sz = 1
 # N = 20
 # z = 1.0
 # psi0 = coherent(5, z)
@@ -78,8 +69,8 @@ state1 = [psi0, psi1, psi2]
 #
 # v = tensordot(psi0, v, axes=[[0], [0]])
 # print(v)
-v = expct_value(a, state1)
-print(v)
+# v = expct_value(a, state1)
+# print(v)
 
 a = destroy(N)
 # na = a * a.dag()
