@@ -31,7 +31,7 @@ def fock_state(N, n):
 
 def coherent_state(N, z):
     if z == 0:
-        return fock_state(N)
+        return fock_state(N, 0)
     else:
         a = destroy_op(N)
         D = expm(z * dagger(a) - z.conjugate() * a)
