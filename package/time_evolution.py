@@ -49,3 +49,12 @@ def expect_value(operator, rho):
             for idx, r in enumerate(rho):
                 value[iop, idx] = trace(tensordot(r, op, axes=[[1], [0]]))
     return value
+
+
+def vn_entropy(rho):
+    if len(rho.shape) == 1:
+        rho.reshape([len(rho), 1])
+    if rho.shape[0] != rho.shape[1]:
+        rho = density_matrix(rho)
+    entropy = -1 * trace(rho * np.log(rho))
+    return entropy

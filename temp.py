@@ -6,17 +6,8 @@ from package.plot import plot_fock_number
 import matplotlib as mpl
 from package.plot_energy import plot_energy_b
 from package.JCM import JCM_Hamiltonian, operator
-from package.time_evolution import expect_value
-# from package.time_evolution import expect_value, H_evolution,
+from package.time_evolution import expect_value, H_evolution
 
-
-def vn_entropy(rho):
-    if len(rho.shape) == 1:
-        rho.reshape([len(rho), 1])
-    if rho.shape[0] != rho.shape[1]:
-        rho = density_matrix(rho)
-        entropy = -1 * (rho * np.log(rho)).trace
-    return entropy
 
 
 def H_evolution(H, rho0, tlist):
