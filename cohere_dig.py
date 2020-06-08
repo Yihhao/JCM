@@ -32,41 +32,6 @@ def compute(N, walist, wc, g, use_rwa):
 
     return evals_mat
 
-
-def H_evolution(H, rho0, tlist):
-    """
-    H is independent time
-    :param H: Hamilton
-    :param rho0: initial state
-    :param tlist: a list of time
-    :return:
-    """
-
-    shape = [len(tlist)]
-    two_d = False
-    for i in rho0.shape:
-        shape.append(i)
-    if len(rho0.shape) == 1:
-        rho0.reshape([len(rho0), 1])
-    if rho0.shape[0] == rho0.shape[1]:
-        two_d = True
-    result = []
-    dt = 0
-    # I = eye(H.shape[0])
-    for index, t in enumerate(tlist):
-        dt = t - dt
-        U = expm(-1.0j * H * t)
-        if two_d:
-            temp = dot(dagger(U), rho0)
-            temp = dot(temp, U)
-            rho0 = temp
-            result.appned(temp)
-        else:
-            temp = dot(U, rho0)
-            result.append(temp)
-    return result
-
-
 nc = 1
 sx = 1
 sz = 1

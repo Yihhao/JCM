@@ -1,5 +1,4 @@
 from package import *
-from numpy import trace
 
 
 def p_trace(rho, size=None, axes=None):

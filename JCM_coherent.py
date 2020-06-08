@@ -1,9 +1,6 @@
-import matplotlib.pyplot as plt
-import numpy as np
-from numpy import pi, sqrt
+from package import *
 from qutip import *
-from package.JCM import JCM_Hamiltonian, operator
-from package.state import initial_state
+from package.older import initial_state, JCM_Hamiltonian, operator
 
 
 def fig_name():

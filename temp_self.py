@@ -1,5 +1,5 @@
-from JCM_2 import JCM_Hamiltonian, operator, initial_coherent_state, initial_state
 from package import *
+from package.JCM import JCM_Hamiltonian, operator, initial_state
 from package.time_evolution import H_evolution, expect_value
 
 
