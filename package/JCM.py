@@ -13,8 +13,7 @@ def initial_state(text, N=None, z=0, wav=(1, 0)):
         fig_tilte = 'n'
         psi0 = initial_fock_state(N, z, wav)
     else:
-        psi0 = 0
-        fig_tilte = ''
+        raise TypeError("text must be 'coherent' or 'fock'")
     return psi0, fig_tilte
 
 
@@ -67,7 +66,7 @@ def initial_coherent_state(N, z=0., wav=(1, 0)):
     return psi
 
 
-def operator(N):
+def tensor_operator(N):
     """
     define operator.
     return tensor of sm, sx, a and I, the dimension is  |N> * |2>
@@ -109,7 +108,7 @@ def JCM_Hamiltonian(N, wc, wa, g=None, use_rwa=True, tuple=False):
         return a Hamiltonian or [H0, Hint]?
     """
 
-    sm, sx, a, I = operator(N)
+    sm, sx, a, I = tensor_operator(N)
     sz = dot(dagger(sm), sm) - dot(sm, dagger(sm))
     nc = dot(dagger(a), a)
     # define Hamiltonian
@@ -120,10 +119,10 @@ def JCM_Hamiltonian(N, wc, wa, g=None, use_rwa=True, tuple=False):
     #     H0 = wc * (a.dag() * a + 0.5 * I) + 0.5 * wa * sz
     #     H1 = xmi * (a.dag() * a + 0.5 * I) * sz
     if use_rwa is True:
-        H0 = wc * a.dag() * a + 0.5 * wa * sz
+        H0 = wc * nc - 0.5 * wa * sz
         H1 = dot(dagger(sm), a) + dot(sm, dagger(a))
     else:
-        H0 = wc * nc + 0.5 * wa * sz
+        H0 = wc * nc - 0.5 * wa * sz
         H1 = dot(sx, a + dagger(a))
 
     if tuple is True or g is None:
@@ -134,7 +133,7 @@ def JCM_Hamiltonian(N, wc, wa, g=None, use_rwa=True, tuple=False):
 
 
 def JCM_eff_H(N, wa, wc, g, tuple=False):
-    sm, sx, a, I = operator(N)
+    sm, sx, a, I = tensor_operator(N)
     sz = dot(dagger(sm), sm) - dot(sm, dagger(sm))
     delta = wa - wc
     xmi = g ** 2 / delta

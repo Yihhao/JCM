@@ -4,7 +4,6 @@ import scipy.linalg as LA
 from numpy import pi
 from numpy import sqrt, zeros, array, tensordot, arange, real, dot, eye, trace
 from scipy.linalg import expm
-# from package.operator import dagger, density_matrix
 from package.linear_algebra import dagger, density_matrix, tensorproduct, normalization, p_trace
 
 

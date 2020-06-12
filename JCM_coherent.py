@@ -1,27 +1,29 @@
-from package import *
-from qutip import *
-from package.older import initial_state, JCM_Hamiltonian, operator
+from package.JCM import initial_state, JCM_Hamiltonian, tensor_operator
+from package.operator import *
+from package.time_evolution import H_evolution, expect_value
+from numpy import real
 
 
-def fig_name():
+def fig_name(eff=False):
     # parameter name
     wav_name = ''.join(['_', str(wav[0]), str(wav[1])])
     parameter_name = "".join(['d%s' % int(d), fig_tilte, '%s' % int(z), wav_name])
     detuning = "".join([
         '\n', r'$\Delta= %.2f * 2\pi \qquad g =%.2f * 2\pi$' % (d, couple)
     ])
-    # filename = psi_text + parameter_name
-    if eff:
-        filename = parameter_name + '_eff'
-        parameter_name += '_eff'
-        text_tilte = "jcm %s = %s" % (fig_tilte, z)
-    elif use_rwa:
+
+    if use_rwa:
         filename = parameter_name + '_rwa'
         parameter_name += '_rwa'
         text_tilte = "jcm with rwa %s = %s" % (fig_tilte, z)
     else:
         text_tilte = "jcm without rwa  %s = %s" % (fig_tilte, z)
         filename = parameter_name
+
+    if eff:
+        filename = parameter_name + '_eff'
+        parameter_name += '_eff'
+        text_tilte = "jcm %s = %s" % (fig_tilte, z)
 
     filename = psi_text + filename
     tilte = text_tilte + detuning
@@ -63,7 +65,7 @@ def plot():
 if __name__ == '__main__':
     # psi_text = 'fock'
     psi_text = 'coherent'
-    store = 'fig'  #store folder
+    store = 'fig'  # store folder
     # initial parameters
     N = 20  # number of cavity fock states
     z = 1.7  # fock occupy number or amplitude of coherent state
@@ -72,36 +74,27 @@ if __name__ == '__main__':
     wa = 2.2 * 2 * pi  # atom frequency
     delta = abs(wc - wa)  # detuning
     g = 0.05 * 2 * pi      # coupling strength that is consistent with chi
-    use_rwa = True# rwa: rotating wave approximation
-    eff = False  # eff : use effective Hamiltonian
+    use_rwa = False# rwa: rotating wave approximation
 
     taulist = np.linspace(0, 50, 5001)  # time evolution
-
-    # collapse operators
-    kappa = 0.005  # cavity dissipation rate
-    gamma = 0.05  # atom dissipation rate
-    n_th = 0.0  # avg number of thermal bath excitation
 
     # initial state
     psi0, fig_tilte = initial_state(psi_text, N, z=z, wav=wav)
 
     print('coupling strength g : %s' % g)
-    H = JCM_Hamiltonian(N, wc, wa, g, use_rwa, eff)
-    sm, sz, a, I = operator(N)
-    c_ops = [sqrt(kappa * (1 + n_th)) * a,
-             sqrt(kappa * n_th) * a.dag(),
-             np.sqrt(gamma) * sm]
+    H = JCM_Hamiltonian(N, wc, wa, g, use_rwa)
+    sm, sx, a, I = tensor_operator(N)
 
-    nc = a.dag() * a
-    xc = a.dag() + a
-    na = sm.dag() * sm
-    ground = sm * sm.dag()
+    nc = dot(dagger(a), a)
+    xc = dagger(a) + a
+    na = dagger(sm) * sm
+    ground = dot(sm, dagger(sm))
 
-    res = mesolve(H, psi0, taulist, [], [])
+    res = H_evolution(H, psi0, taulist)
 
     expt_op = [nc, na, xc, ground]
-    expt_list = expect(expt_op, res.states)
-    nc_list, na_list, xc_list, ground_list = expt_list
+    expt_list = expect_value(expt_op, res)
+    nc_list, na_list, xc_list, ground_list = real(expt_list)
 
     d = (delta / (2 * pi))
     couple = (g / (2 * pi))
@@ -111,24 +104,7 @@ if __name__ == '__main__':
     tilte, filename, parameter_name = fig_name()
 
     plot()
-    # plt.tight_layout()
+    plt.tight_layout()
     # plt.savefig(path+filename, dpi=720)
     plt.show()
-
-    # gnd_e, gndv = H.groundstate()
-
-    # rho_cavity = ptrace(res.states[-1], 0)
-    # plot_wigner(rho_cavity)
-    # plt.savefig(path+'winger_'+parameter_name, dpi=720)
-    # plt.show()
-
-    # plot_wigner(res.states[-1])
-    # plt.savefig(path+'psi_winger_'+parameter_name, dpi=720)
-    # plt.show()
-
-    # rho_cavity_i = ptrace(psi0, 0)
-    # fig, axes = plt.subplots(1, 2, figsize=(12, 6))
-    # plot_fock_distribution(rho_cavity_i, ax=axes[0])
-    # plot_fock_distribution(rho_cavity, ax=axes[1])
-    # plt.show()
 
