@@ -14,6 +14,6 @@ def plot_fock_number(rho0, fig=None, ax=None, figsize=(8, 6)):
                color="green", alpha=0.6, width=0.8)
     ax.set_ylim(0, 1)
     ax.set_xlim(-.5, N)
-    ax.set_xlabel('Fock number', fontsize=12)
-    ax.set_ylabel('Occupation probability', fontsize=12)
+    ax.set_xlabel('Fock number', fontsize=20)
+    ax.set_ylabel('Occupation probability', fontsize=20)
     return fig, ax

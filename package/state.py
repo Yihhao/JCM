@@ -14,5 +14,5 @@ def coherent_state(N, z):
     else:
         a = destroy_op(N)
         D = expm(z * dagger(a) - z.conjugate() * a)
-        alpha = tensordot(D, fock_state(N, 0), axes=[[1], [0]])
+        alpha = dot(D, fock_state(N, 0))
         return alpha

@@ -30,31 +30,23 @@ def H_evolution(H, rho0, tlist):
     return result
 
 
-def expect_value(operator, rho):
-    if not isinstance(rho, list) and not isinstance(operator, list):
+def expect(operator, rho):
+    if not isinstance(operator, list):
         if operator.shape[0] != operator.shape[0]:
             raise TypeError("input operator dimension must be same [N,N]")
-        value = trace(tensordot(rho, operator, axes=[[1], [0]]))
-    elif not isinstance(operator, list):
-        value = zeros([len(rho)], dtype=complex)
-        if operator.shape[0] != operator.shape[0]:
-            raise TypeError("input operator dimension must be same [N,N]")
-        for idx, r in enumerate(rho):
-            value[idx] = trace(tensordot(r, operator, axes=[[1], [0]]))
+        if rho.shape[0] != rho.shape[1]:
+            rho = density_matrix(rho)
+        if not isinstance(rho, list):
+            value = trace(dot(rho, operator))
+        else:
+            value = zeros([len(rho)], dtype=complex)
+            for idx, r in enumerate(rho):
+                value[idx] = trace(dot(r, operator))
     else:
         value = zeros([len(operator), len(rho)], dtype=complex)
         for iop, op in enumerate(operator):
             if op.shape[0] != op.shape[0]:
                 raise TypeError("input operator dimension must be same [N,N]")
             for idx, r in enumerate(rho):
-                value[iop, idx] = trace(tensordot(r, op, axes=[[1], [0]]))
+                value[iop, idx] = trace(dot(r, op))
     return value
-
-
-def vn_entropy(rho):
-    if len(rho.shape) == 1:
-        rho.reshape([len(rho), 1])
-    if rho.shape[0] != rho.shape[1]:
-        rho = density_matrix(rho)
-    entropy = -1 * trace(rho * np.log(rho))
-    return entropy
