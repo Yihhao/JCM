@@ -2,7 +2,7 @@ from package import *
 from package.operator import sigmaz_op
 from package.JCM import JCM_Hamiltonian, tensor_operator, initial_state
 from package.state import fock_state
-from package.time_evolution import H_evolution, expect_value
+from package.time_evolution import H_evolution, expect
 
 
 N = 20
@@ -27,7 +27,7 @@ psi0, fig_tilte = initial_state(psi_text, N, z, wav)
 result = H_evolution(H, psi0, tlist)
 op = [dot(sm, dagger(sm)), dot(dagger(sm), sm), dot(dagger(a), a)]
 fig, axes = plt.subplots(1, 1, figsize=(12, 8))
-ept_g, ept_e, na = expect_value(op, result)
+ept_g, ept_e, na = expect(op, result)
 # ept_g = expect_value(sz, result)
 # ept_g = expect_value(sz, p_res)
 # plt.plot(tlist, np.real(ept_e), label='exit')
@@ -51,7 +51,7 @@ plt.show()
 
 fig, axes = plt.subplots(1, 1, figsize=(12, 8))
 sz = dot(dagger(sm), sm) - dot(sm, dagger(sm))
-ept_g = expect_value(sz, result)
+ept_g = expect(sz, result)
 plt.plot(tlist, np.real(ept_g))
 plt.xlim(0, 30)
 plt.ylim(-1.05, 1.05)

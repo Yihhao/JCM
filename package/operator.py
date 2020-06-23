@@ -32,13 +32,13 @@ def sigmay_op():
 
 def sigmap_op():
     """Creation operator for Pauli spins."""
-    p = array([[0, 1],
-               [0, 0]], dtype=float)
+    p = array([[0, 0],
+               [1, 0]], dtype=float)
     return p
 
 
 def sigmam_op():
     """annihilation operator for Pauli spins."""
-    m = array([[0, 0],
-               [1, 0]], dtype=float)
+    m = array([[0, 1],
+               [0, 0]], dtype=float)
     return m

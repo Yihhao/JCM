@@ -119,10 +119,10 @@ def JCM_Hamiltonian(N, wc, wa, g=None, use_rwa=True, tuple=False):
     #     H0 = wc * (a.dag() * a + 0.5 * I) + 0.5 * wa * sz
     #     H1 = xmi * (a.dag() * a + 0.5 * I) * sz
     if use_rwa is True:
-        H0 = wc * nc - 0.5 * wa * sz
+        H0 = wc * nc + 0.5 * wa * sz
         H1 = dot(dagger(sm), a) + dot(sm, dagger(a))
     else:
-        H0 = wc * nc - 0.5 * wa * sz
+        H0 = wc * nc + 0.5 * wa * sz
         H1 = dot(sx, a + dagger(a))
 
     if tuple is True or g is None:
@@ -130,16 +130,3 @@ def JCM_Hamiltonian(N, wc, wa, g=None, use_rwa=True, tuple=False):
     else:
         H = H0 + g * H1
         return H
-
-
-def JCM_eff_H(N, wa, wc, g, tuple=False):
-    sm, sx, a, I = tensor_operator(N)
-    sz = dot(dagger(sm), sm) - dot(sm, dagger(sm))
-    delta = wa - wc
-    xmi = g ** 2 / delta
-    H0 = wc * (a.dag() * a + 0.5 * I) + 0.5 * wa * sz
-    H1 = xmi * (a.dag() * a + 0.5 * I) * sz
-    if tuple is True:
-        return H0, H1
-    else:
-        return H0 + H1

@@ -27,7 +27,7 @@ a = destroy_op(N)
 
 # expect value
 na = dot(dagger(a), a)
-print(expect(na, psi0))
+# print(expect(na, psi0))
 # e = sum(psi0*psi0)
 # b = dot(na, psi0)
 # temp = sum(psi0 * b)

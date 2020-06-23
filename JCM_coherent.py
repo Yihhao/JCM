@@ -1,6 +1,6 @@
 from package.JCM import initial_state, JCM_Hamiltonian, tensor_operator
 from package.operator import *
-from package.time_evolution import H_evolution, expect_value
+from package.time_evolution import H_evolution, expect
 from numpy import real
 
 
@@ -67,14 +67,14 @@ if __name__ == '__main__':
     psi_text = 'coherent'
     store = 'fig'  # store folder
     # initial parameters
-    N = 20  # number of cavity fock states
-    z = 1.7  # fock occupy number or amplitude of coherent state
+    N = 50  # number of cavity fock states
+    z = 20  # fock occupy number or amplitude of coherent state
     wav = (0, 1)  # Atom initial wavefuction e.g. (0, 1) is |0>
     wc = 1.0 * 2 * pi  # cavity frequency
-    wa = 2.2 * 2 * pi  # atom frequency
+    wa = 1.0 * 2 * pi  # atom frequency
     delta = abs(wc - wa)  # detuning
     g = 0.05 * 2 * pi      # coupling strength that is consistent with chi
-    use_rwa = False# rwa: rotating wave approximation
+    use_rwa = False # rwa: rotating wave approximation
 
     taulist = np.linspace(0, 50, 5001)  # time evolution
 
@@ -87,13 +87,13 @@ if __name__ == '__main__':
 
     nc = dot(dagger(a), a)
     xc = dagger(a) + a
-    na = dagger(sm) * sm
+    na = dot(dagger(sm), sm)
     ground = dot(sm, dagger(sm))
 
     res = H_evolution(H, psi0, taulist)
 
     expt_op = [nc, na, xc, ground]
-    expt_list = expect_value(expt_op, res)
+    expt_list = expect(expt_op, res)
     nc_list, na_list, xc_list, ground_list = real(expt_list)
 
     d = (delta / (2 * pi))

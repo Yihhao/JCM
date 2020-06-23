@@ -38,7 +38,7 @@ def tensorproduct(A, B):
             matrix[i:i + Nb1, j:j + Nb2] = A[l, k] * B
             k += 1
         l += 1
-    return matrix.reshape([Na1*Nb1, Na2*Nb2])
+    return matrix
 
 
 def normalization(state):
