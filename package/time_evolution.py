@@ -34,13 +34,15 @@ def expect(operator, rho):
     if not isinstance(operator, list):
         if operator.shape[0] != operator.shape[0]:
             raise TypeError("input operator dimension must be same [N,N]")
-        if rho.shape[0] != rho.shape[1]:
-            rho = density_matrix(rho)
         if not isinstance(rho, list):
             value = trace(dot(rho, operator))
+            if rho.shape[0] != rho.shape[1]:
+                rho = density_matrix(rho)
         else:
             value = zeros([len(rho)], dtype=complex)
             for idx, r in enumerate(rho):
+                if r.shape[0] != r.shape[1]:
+                    rho = density_matrix(r)
                 value[idx] = trace(dot(r, operator))
     else:
         value = zeros([len(operator), len(rho)], dtype=complex)
