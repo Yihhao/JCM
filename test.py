@@ -38,5 +38,5 @@ def main(url, number):
 
 if __name__ == "__main__":
     url = 'https://npm.cpami.gov.tw/apply_1_2.aspx?unit=c951cdcd-b75a-46b9-8002-8ef952ec95fd'
-    for i in range(100):
-        main(url, i)
+    # for i in range(100):
+    main(url, 0)
